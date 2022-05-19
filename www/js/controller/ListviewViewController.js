@@ -4,12 +4,12 @@
  import {mwf} from "../Main.js";
  import {entities} from "../Main.js";
  
- export default class ListViewViewController extends mwf.ViewController {
+ export default class ListviewViewController extends mwf.ViewController {
  
      constructor() {
          super();
  
-         console.log("ListViewViewController()");
+         console.log("ListviewViewController()");
      }
  
      /*
@@ -18,7 +18,7 @@
      async oncreate() {
          // TODO: do databinding, set listeners, initialise the view
  
- 
+        console.log("oncreate: ", this.root);
          // call the superclass once creation is done
          super.oncreate();
      }
