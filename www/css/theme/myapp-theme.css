@@ -1,6 +1,6 @@
 :root {
     /*!* general colors *!*/
-    --var-mwf-primary-text-color: black;
+    /* --var-mwf-primary-text-color: black; */
     /*--var-mwf-dialog-text-color: black;*/
     /*--var-mwf-primary-line-color: limegreen;*/
     /*--var-mwf-primary-area-color: limegreen;*/
@@ -28,7 +28,7 @@
     /*--var-mwf-footer-separator-color: transparent;*/
 
     /*!* main element and body *!*/
-    --var-mwf-main-background-color: white;
+    /* --var-mwf-main-background-color: white; */
 
     /*!* imgbuttons *!*/
     /*--var-mwf-imgbutton-size: 40px;*/
