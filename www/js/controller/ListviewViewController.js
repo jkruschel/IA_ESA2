@@ -50,9 +50,32 @@ export default class ListviewViewController extends mwf.ViewController {
             this.createNewItem();
         });
 
+        this.prepareCRUDSwitching();
+
         console.log("oncreate: ", this.root);
         // call the superclass once creation is done
         super.oncreate();
+    }
+
+    prepareCRUDSwitching() {
+        const switchingElement = this.root.querySelector("footer .mwf-img-refresh")
+        switchingElement.onclick = () => {
+            if(this.application.currentCRUDScope == "local") {
+                this.application.switchCRUD("remote");
+                alert(this.application.currentCRUDScope);
+            }
+            else {
+                this.application.switchCRUD("local");
+                alert(this.application.currentCRUDScope);
+            }
+            this.initialiseListItemsInListView();
+        }
+    }
+
+    initialiseListItemsInListView() {
+        entities.MediaItem.readAll().then((items) => {
+            this.initialiseListview(items);
+            });
     }
 
     /*
@@ -75,7 +98,6 @@ export default class ListviewViewController extends mwf.ViewController {
      */
     onListItemSelected(itemobj, listviewid) {
         // TODO: implement how selection of itemobj shall be handled
-        alert("Element " + itemobj.title + itemobj._id + " wurde ausgewählt!");
     }
 
     /*
@@ -104,6 +126,9 @@ export default class ListviewViewController extends mwf.ViewController {
      */
     async onReturnFromNextView(nextviewid, returnValue, returnStatus) {
         // TODO: check from which view, and possibly with which status, we are returning, and handle returnValue accordingly
+        if (nextviewid == "mediaReadview" && returnValue && returnValue.deletedItem) {
+            this.removeFromListview(returnValue.deletedItem._id);
+        }
     }
 
     deleteItem(item) {

@@ -37,6 +37,7 @@ class MyApplication extends mwf.Application {
 
         // activate the local crud operations
         this.initialiseCRUD(this.CRUDOPS.LOCAL,EntityManager);
+       // this.initialiseCRUD(this.CRUDOPS.REMOTE,EntityManager);
 
         // TODO: do any further application specific initialisations here
 
