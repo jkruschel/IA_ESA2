@@ -34,7 +34,7 @@
 <body data-mwf-application="MyApplication" class="mwf-loading-app">
 
 <!-- TODO-REPEATED: add new views here -->
-<div class="mwf-view mwf-view-initial mwf-styling mwf-dialog-shown" id="mediaOverview" data-mwf-viewcontroller="ListviewViewController">
+<div class="mwf-view mwf-view-initial" id="mediaOverview" data-mwf-viewcontroller="ListviewViewController">
     <header>
         <button class="mwf-imgbutton mwf-img-sandwich mwf-left-align"></button>
         <h1 class="mwf-left-align">Medien</h1>
@@ -53,20 +53,22 @@
         </ul>
     </main>
     <footer>
+        <span class="mwf-left-align" id="datenquelle"></span>
         <button class="mwf-imgbutton mwf-img-refresh mwf-right-align"></button>
     </footer>
 </div>
-<div data-mwf-templatename="mediaItemMenu" class="mwf-listitem-menu mwf-template mwf-databind mwf-dialog mwf-popup" data-mwf-listitem-menu="mediaItemDeleteDialog>
+<div data-mwf-templatename="mediaItemMenu" class="mwf-listitem-menu mwf-template mwf-databind mwf-dialog mwf-popup">
     <header>
         <h2 class="mwf-dyncontent">{{title}}{{_id}}</h2>
     </header>
     <main>
         <ul>
-            <li class="mwf-li-singletitle mwf-menu-item mwf-listitem-menu-control">Löschen</li>
+            <li class="mwf-li-singletitle mwf-menu-item" data-mwf-targetaction="deleteItem">Löschen</li>
             <li class="mwf-li-singletitle mwf-menu-item" data-mwf-targetaction="editItem">Editieren</li>
         </ul>
     </main>
 </div>
+<!-- Item Dialog neu erstellen/ändern-->
 <div class="mwf-dialog mwf-popup mwf-template mwf-databind mwf-view-component" 
 data-mwf-viewcontroller="GenericDialogTemplateViewController" 
 data-mwf-templatename="mediaItemDialog">
@@ -83,7 +85,7 @@ data-mwf-templatename="mediaItemDialog">
         </form>
     </main>
 </div>
-<!-- Lesesicht -->
+<!-- Lesesicht-->
 <div class="mwf-view" id="mediaReadview" data-mwf-viewcontroller="ReadviewViewController">
     <div class="mwf-template mwf-databind" data-mwf-templatename="mediaReadviewTemplate">
         <header>
@@ -100,17 +102,16 @@ data-mwf-templatename="mediaItemDialog">
     </div>
 </div>
 <!-- Löschdialog -->
-<div class="mwf-dialog mwf-popup mwf-template mwf-databind mwf-view-component mwf-styling mwf-shown" 
+<div class="mwf-dialog mwf-popup mwf-template mwf-databind mwf-view-component" 
 data-mwf-viewcontroller="GenericDialogTemplateViewController" 
 data-mwf-templatename="mediaItemDeleteDialog">
     <main>
         <h2>Medium Löschen</h2>
         <form id="itemEditForm" on-submit="submitForm">
-            Möchten sie das Medium {{item.title}} löschen?
+            <h2>Möchten sie das Medium {{item.title}} löschen?</h2>
             <div class="mwf-buttonbar">
-                <input class="mwf-button-prio mwf-right-align mwf-button" type="submit" value="{{#if
-                    item.created}}Ändern{{else}}Hinzufügen{{/if}}" />
-                <button class="mwf-left-align mwf-button" type="button" data-mwf-targetaction="deleteItem">Löschen</button>
+                <input class="mwf-left-align mwf-button" type="submit" value="Abbrechen" />
+                <button class="mwf-button-prio mwf-right-align mwf-button" type="button" on-click="deleteItem">Löschen</button>
             </div>
         </form>
     </main>

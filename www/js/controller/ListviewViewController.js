@@ -59,15 +59,15 @@ export default class ListviewViewController extends mwf.ViewController {
 
     prepareCRUDSwitching() {
         const switchingElement = this.root.querySelector("footer .mwf-img-refresh")
+        this.root.querySelector("#datenquelle").innerHTML = `Datenquelle: ${this.application.currentCRUDScope}`;
         switchingElement.onclick = () => {
             if(this.application.currentCRUDScope == "local") {
                 this.application.switchCRUD("remote");
-                alert(this.application.currentCRUDScope);
             }
             else {
                 this.application.switchCRUD("local");
-                alert(this.application.currentCRUDScope);
             }
+            this.root.querySelector("#datenquelle").innerHTML = `Datenquelle: ${this.application.currentCRUDScope}`;
             this.initialiseListItemsInListView();
         }
     }
@@ -136,9 +136,24 @@ export default class ListviewViewController extends mwf.ViewController {
         //     this.removeFromListview(item._id);
         // });
 
-        item.delete().then(() => {
-            this.removeFromListview(item._id);
-            });
+        // item.delete().then(() => {
+        //     this.removeFromListview(item._id);
+        //     });
+        this.showDialog("mediaItemDeleteDialog", {
+            item: item,
+            actionBindings: {
+                submitForm: ((event) => {
+                    event.original.preventDefault();
+                    this.hideDialog();
+                }),
+                deleteItem: ((event) => {
+                    item.delete().then(() => {
+                        this.removeFromListview(item._id);
+                        });
+                        this.hideDialog();
+                })
+            }
+        })
     }
     editItem(item) {
         this.showDialog("mediaItemDialog", {

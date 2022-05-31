@@ -36,8 +36,8 @@ class MyApplication extends mwf.Application {
         this.registerCRUD("MediaItem", this.CRUDOPS.REMOTE, GenericCRUDImplRemote.newInstance("MediaItem"));
 
         // activate the local crud operations
-        this.initialiseCRUD(this.CRUDOPS.LOCAL,EntityManager);
-       // this.initialiseCRUD(this.CRUDOPS.REMOTE,EntityManager);
+       // this.initialiseCRUD(this.CRUDOPS.LOCAL,EntityManager);
+        this.initialiseCRUD(this.CRUDOPS.REMOTE,EntityManager);
 
         // TODO: do any further application specific initialisations here
 

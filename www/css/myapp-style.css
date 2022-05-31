@@ -3,3 +3,8 @@
     width: 100%;
     max-width: 100%;
     }
+
+#datenquelle {
+    height: 40px;
+    line-height: 40px;
+    }
