@@ -23,13 +23,33 @@ export default class EditviewViewController extends mwf.ViewController {
 
         // TODO: do databinding, set listeners, initialise the view
         this.viewProxy = this.bindElement("mediaEditviewTemplate", {item:myitem}, this.root).viewProxy;
-        this.viewProxy.bindAction("saveItem", (evt) => {
-            evt.original.preventDefault();
-            this.createOrUpdateMediaItem(myitem);
-        });
 
         const editviewForm = document.getElementById("mediaEditviewForm");
         const uploadElement = editviewForm.uploadimg;
+
+        this.viewProxy.bindAction("saveItem", (evt) => {
+            evt.original.preventDefault();
+            if(uploadElement.files[0]) {
+                const formdata = new FormData();
+                formdata.append("imgdata", uploadElement.files[0]);
+                const xhreq = new XMLHttpRequest();
+                xhreq.open("POST", "api/upload");
+                xhreq.send(formdata);
+                xhreq.onreadystatechange = () => {
+                    if(xhreq.readyState === 4 && xhreq.status === 200) {
+                       const responseData = JSON.parse(xhreq.responseText);
+                       const uploadedDataPath = responseData.data.imgdata;
+                       myitem.src = uploadedDataPath;
+                       this.createOrUpdateMediaItem(myitem);
+                    }
+                }
+                
+            }
+            else{
+                this.createOrUpdateMediaItem(myitem);
+            }
+        });
+
         const previewElement = this.root.querySelector("main form img");
         uploadElement.onchange = () => {
             const imgsrc = URL.createObjectURL(uploadElement.files[0]);
