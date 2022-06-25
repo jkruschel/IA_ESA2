@@ -39,9 +39,10 @@
         <button class="mwf-imgbutton mwf-img-sandwich mwf-left-align"></button>
         <h1 class="mwf-left-align">Medien</h1>
         <button class="mwf-imgbutton mwf-img-plus mwf-right-align" id="addNewMediaItem"></button>
+        <button id="setView"></button>
     </header>
     <main class="mwf-scrollview">
-        <ul class="mwf-listview" data-mwf-listitem-view="myapp-listitem" data-mwf-listitem-menu="mediaItemMenu">
+        <ul class="mwf-listview" data-mwf-listitem-view="myapp-listitem" data-mwf-listitem-menu="mediaItemMenu" id="ItemList">
             <li class="mwf-listitem mwf-li-title-subtitle mwf-template mwf-databind" data-mwf-templatename="myapp-listitem" data-mwf-targetview="mediaReadview">
                 <img class="mwf-left-align" src="{{src}}"/>
                 <div class="mwf-li-titleblock">
@@ -64,7 +65,9 @@
     <main>
         <ul>
             <li class="mwf-li-singletitle mwf-menu-item" data-mwf-targetaction="deleteItem">Löschen</li>
-            <li class="mwf-li-singletitle mwf-menu-item" data-mwf-targetview="mediaEditview">Editieren</li>
+            <li class="mwf-li-singletitle mwf-menu-item" data-mwf-targetaction="editItem">Editieren</li>
+            <li class="mwf-li-singletitle mwf-menu-item" data-mwf-targetview="mediaEditview">Editieren (FRM)</li>
+            <li class="mwf-li-singletitle mwf-menu-item" data-mwf-targetaction="copyItem">Kopieren</li>
         </ul>
     </main>
 </div>
@@ -92,9 +95,11 @@ data-mwf-templatename="mediaItemDialog">
             <button class="mwf-imgbutton mwf-img-sandwich mwf-left-align"></button>
             <h1 class="mwf-left-align">{{item.title}}</h1>
             <button class="mwf-imgbutton mwf-img-delete mwf-right-align" on-click="deleteItem"></button>
+            <button class="mwf-imgbutton mwf-img-pencil mwf-right-align" id="editMediaItem"></button>
         </header>
         <main class="mwf-scrollview">
-            <img src="{{item.src}}"/>
+            <img src="{{item.src}}" id="previewImage"/>
+            <span>{{item.description}}</span>
         </main>
         <footer>
             <button class="mwf-back mwf-imgbutton mwf-img-backward"></button>
@@ -124,18 +129,24 @@ data-mwf-templatename="mediaItemDeleteDialog">
             <h1 class="mwf-left-align">{{#if item.created}}{{item.title}}{{else}}Neues
                 Medium{{/if}}</h1>
             <input class="mwf-imgbutton mwf-right-align mwf-img-disk" type="submit" value="speichern" form="mediaEditviewForm"/>
+            <button class="mwf-imgbutton mwf-right-align mwf-img-delete" id="deleteItem" disabled="{{#unless item.created}}disabled{{/unless}}"></button>
+            <button class="mwf-imgbutton mwf-right-align mwf-img-hash" id="defaultItem" disabled="{{#if item.created}}disabled{{/if}}"></button>
         </header>
         <main class="mwf-scrollview">
             <form on-submit="saveItem" id="mediaEditviewForm">
                 <fieldset>
                     <legend>URL</legend>
-                    <input placeholder="URL" type="url" name="url" value="{{item.src}}"/>
+                    <input placeholder="URL" type="url" name="url" id="url" value="{{item.src}}"/>
                     <input type="file" name="uploadimg"/>
                 </fieldset>
                 <img src="{{item.src}}"/>
                 <fieldset>
                     <legend>Titel</legend>
                     <input placeholder="Titel" type ="text" name="title" value="{{item.title}}"/>
+                </fieldset>
+                <fieldset>
+                    <legend>Beschreibung</legend>
+                    <input placeholder="Beschreibung" type="text" name="beschreibung" value="{{item.description}}"/>
                 </fieldset>
             </form>
         </main>

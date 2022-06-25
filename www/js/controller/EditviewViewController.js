@@ -50,11 +50,26 @@ export default class EditviewViewController extends mwf.ViewController {
             }
         });
 
+        const deleteButton = this.root.querySelector("#deleteItem");
+        deleteButton.onclick = () => {
+            myitem.delete().then(() => {
+                this.previousView({deletedItem:myitem});
+                })
+        }
+
         const previewElement = this.root.querySelector("main form img");
         uploadElement.onchange = () => {
             const imgsrc = URL.createObjectURL(uploadElement.files[0]);
             previewElement.src = imgsrc;
         }
+
+        const defaultValueButton = this.root.querySelector("#defaultItem");
+        defaultValueButton.onclick = () => {
+            const defaultImage = "http://placekitten.com/200";
+            this.root.querySelector("#url").value = defaultImage;
+            previewElement.src = defaultImage;
+            myitem.src = defaultImage;
+        };
 
         // call the superclass once creation is done
         super.oncreate();

@@ -28,6 +28,19 @@ export default class ReadviewViewController extends mwf.ViewController {
             })
             }));
 
+        this.editMediaItem = this.root.querySelector("#editMediaItem");
+        this.editMediaItem.onclick = (() => {
+            // this.crudops.create(new entities.MediaItem("m","https://placekitten.com/100/100")).then((created) =>
+            //     {
+            //     this.addToListview(created);
+            //     }
+            //     );
+            // });
+
+            //this.createNewItem();
+            this.nextView("mediaEditview", {item: mediaItem});
+        });
+
         // call the superclass once creation is done
         super.oncreate();
     }
@@ -73,6 +86,12 @@ export default class ReadviewViewController extends mwf.ViewController {
      */
     async onReturnFromNextView(nextviewid, returnValue, returnStatus) {
         // TODO: check from which view, and possibly with which status, we are returning, and handle returnValue accordingly
+        if(!returnValue) return;
+        if(returnValue.deletedItem) {
+            this.previousView({deletedItem:returnValue.deletedItem});
+            return false;
+        }
+        else this.oncreate();
     }
 
 }

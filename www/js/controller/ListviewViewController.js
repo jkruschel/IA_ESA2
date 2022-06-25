@@ -15,8 +15,12 @@ export default class ListviewViewController extends mwf.ViewController {
 
         this.addNewMediaItemElement = null;
 
+        this.objectOfInterest = null;
+
 
     }
+
+    
 
     /*
      * for any view: initialise the view
@@ -55,9 +59,35 @@ export default class ListviewViewController extends mwf.ViewController {
         this.prepareCRUDSwitching();
 
         console.log("oncreate: ", this.root);
+
+
         // call the superclass once creation is done
         super.oncreate();
+        
     }
+
+    async onresume() {
+        super.onresume().then( () => {
+        if(this.objectOfInterest){
+            console.log("!!!!!!!!!!!!!!!!!!!Object of Interest: " + this.objectOfInterest);
+            console.log("!!!!!!!!!!!!!!!!!!!Object of Interest top offset: " + this.objectOfInterest.offsetTop);
+
+            const setView = () => {
+            console.log("trying to scroll");
+            console.log(this.objectOfInterest);
+            let targetObject = document.querySelector(".mwf-listitem[data-mwf-id=\'" + this.objectOfInterest + "\']");
+            const rect1 = targetObject.getBoundingClientRect();
+            console.log("rect1: " + rect1.top);
+            document.querySelector("main").scrollTop = rect1.top;
+            }
+
+            const waitABit = setTimeout(setView, 600);
+        }
+        }
+        )
+    }
+
+
 
     prepareCRUDSwitching() {
         const switchingElement = this.root.querySelector("footer .mwf-img-refresh")
@@ -128,17 +158,23 @@ export default class ListviewViewController extends mwf.ViewController {
      */
     async onReturnFromNextView(nextviewid, returnValue, returnStatus) {
         // TODO: check from which view, and possibly with which status, we are returning, and handle returnValue accordingly
-        if(!returnValue) return;
+        if(!returnValue){
+            this.initialiseListItemsInListView();
+            return;
+        }
         if(returnValue.deletedItem) {
             this.removeFromListview(returnValue.deletedItem._id);
         }
         else if(returnValue.updatedItem){
             this.updateInListview(returnValue.updatedItem.id, returnValue.updatedItem);
-            this.initialiseListItemsInListView();
+            this.objectOfInterest = returnValue.updatedItem._id;
         }
         else if(returnValue.createdItem){
             this.addToListview(returnValue.createdItem);
+            this.objectOfInterest = returnValue.createdItem._id;
         }
+        this.initialiseListItemsInListView();
+
     }
 
     deleteItem(item) {
@@ -178,7 +214,7 @@ export default class ListviewViewController extends mwf.ViewController {
                 }),
                 deleteItem: ((event) => {
                     this.deleteItem(item);
-                    this.hideDialog();
+                    //this.hideDialog();
                 })
             }
         });
@@ -202,6 +238,12 @@ export default class ListviewViewController extends mwf.ViewController {
         // newItem.create().then(() => {
         //     this.addToListview(newItem);
         // });
+    }
+
+    copyItem(item) {
+        item.create().then(() => {
+            this.addToListview(item)
+        });
     }
 
 }
