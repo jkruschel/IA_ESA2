@@ -3,6 +3,7 @@
  */
 import {mwf} from "../Main.js";
 import {entities} from "../Main.js";
+import { MediaItem } from "../model/MyEntities.js";
 
 export default class EditviewViewController extends mwf.ViewController {
 
@@ -17,7 +18,7 @@ export default class EditviewViewController extends mwf.ViewController {
      */
     async oncreate() {
         console.log("oncreate: ", this.args);
-        const myitem = this.args.item;
+        const myitem = this.args ? this.args.item : new MediaItem();
 
 
         // TODO: do databinding, set listeners, initialise the view
@@ -26,6 +27,14 @@ export default class EditviewViewController extends mwf.ViewController {
             evt.original.preventDefault();
             this.createOrUpdateMediaItem(myitem);
         });
+
+        const editviewForm = document.getElementById("mediaEditviewForm");
+        const uploadElement = editviewForm.uploadimg;
+        const previewElement = this.root.querySelector("main form img");
+        uploadElement.onchange = () => {
+            const imgsrc = URL.createObjectURL(uploadElement.files[0]);
+            previewElement.src = imgsrc;
+        }
 
         // call the superclass once creation is done
         super.oncreate();
