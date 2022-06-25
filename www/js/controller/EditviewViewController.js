@@ -16,20 +16,34 @@ export default class EditviewViewController extends mwf.ViewController {
      * for any view: initialise the view
      */
     async oncreate() {
-        const newitem = new entities.MediaItem("New item from form", "http://placekitten.com/200/200")
+        console.log("oncreate: ", this.args);
+        const myitem = this.args.item;
 
 
         // TODO: do databinding, set listeners, initialise the view
-        this.viewProxy = this.bindElement("mediaEditviewTemplate", {item:newitem}, this.root).viewProxy;
+        this.viewProxy = this.bindElement("mediaEditviewTemplate", {item:myitem}, this.root).viewProxy;
         this.viewProxy.bindAction("saveItem", (evt) => {
             evt.original.preventDefault();
-            newitem.create().then(() => {
-                alert("new item created");
-            })
+            this.createOrUpdateMediaItem(myitem);
         });
 
         // call the superclass once creation is done
         super.oncreate();
+    }
+
+    createOrUpdateMediaItem(item){
+        if(item.created){
+            //update
+            item.update().then(() => {
+                this.previousView({updatedItem: item});
+            })
+        }
+        else{
+            //create
+            item.create().then(() => {
+                this.previousView({createdItem: item});
+            })
+        }
     }
 
     /*

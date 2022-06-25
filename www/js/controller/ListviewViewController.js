@@ -26,7 +26,8 @@ export default class ListviewViewController extends mwf.ViewController {
         this.addNewMediaItemElement =
             this.root.querySelector("#addNewMediaItem");
         this.addNewMediaItemElement.onclick = (() => {
-            this.addToListview(new entities.MediaItem("m new","https://placekitten.com/100/100"));
+            // this.addToListview(new entities.MediaItem("m new","https://placekitten.com/100/100"));
+            this.nextView("mediaEditview", {item: new entities.MediaItem()});
             });
         
         this.initialiseListview(this.items);
@@ -47,7 +48,8 @@ export default class ListviewViewController extends mwf.ViewController {
             //     );
             // });
 
-            this.createNewItem();
+            //this.createNewItem();
+            this.nextView("mediaEditview", {item: new entities.MediaItem()});
         });
 
         this.prepareCRUDSwitching();
@@ -126,8 +128,16 @@ export default class ListviewViewController extends mwf.ViewController {
      */
     async onReturnFromNextView(nextviewid, returnValue, returnStatus) {
         // TODO: check from which view, and possibly with which status, we are returning, and handle returnValue accordingly
-        if (nextviewid == "mediaReadview" && returnValue && returnValue.deletedItem) {
+        if(!returnValue) return;
+        if(returnValue.deletedItem) {
             this.removeFromListview(returnValue.deletedItem._id);
+        }
+        else if(returnValue.updatedItem){
+            this.updateInListview(returnValue.updatedItem.id, returnValue.updatedItem);
+            this.initialiseListItemsInListView();
+        }
+        else if(returnValue.createdItem){
+            this.addToListview(returnValue.createdItem);
         }
     }
 
