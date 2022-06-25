@@ -40,6 +40,8 @@ import ListviewViewController from "./controller/ListviewViewController.js";
 
 import ReadviewViewController from "./controller/ReadviewViewController.js";
 
+import EditviewViewController from "./controller/EditviewViewController.js"
+
 
 // we export the framework modules required by the application and the application modules required by the framework
 export {
@@ -57,7 +59,8 @@ export {
     entities,
     MyInitialViewController,
     ListviewViewController,
-    ReadviewViewController
+    ReadviewViewController,
+    EditviewViewController
     // TODO-REPEATED: export any further view controllers here
 }
 

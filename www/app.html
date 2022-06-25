@@ -34,7 +34,7 @@
 <body data-mwf-application="MyApplication" class="mwf-loading-app">
 
 <!-- TODO-REPEATED: add new views here -->
-<div class="mwf-view mwf-view-initial" id="mediaOverview" data-mwf-viewcontroller="ListviewViewController">
+<div class="mwf-view " id="mediaOverview" data-mwf-viewcontroller="ListviewViewController">
     <header>
         <button class="mwf-imgbutton mwf-img-sandwich mwf-left-align"></button>
         <h1 class="mwf-left-align">Medien</h1>
@@ -115,6 +115,24 @@ data-mwf-templatename="mediaItemDeleteDialog">
             </div>
         </form>
     </main>
+</div>
+<!-- Editview -->
+<div class="mwf-view mwf-view-initial" id="mediaEditview" data-mwf-viewcontroller="EditviewViewController">
+    <div class="mwf-template mwf-databind" data-mwf-templatename="mediaEditviewTemplate">
+        <header>
+
+        </header>
+        <main>
+            <form on-submit="saveItem">
+                <input placeholder="URL" type="url" name="url" value="{{item.src}}"/>
+                <input placeholder="Titel" type ="text" name="title" value="{{item.title}}"/>
+                <input type="submit" value="speichern"/>
+            </form>
+        </main>
+        <footer>
+    
+        </footer>
+    </div>
 </div>
 </body>
 </html>
