@@ -70,14 +70,13 @@ export default class ListviewViewController extends mwf.ViewController {
        await super.onresume();
         let targetObject = document.querySelector(".mwf-listitem[data-mwf-id=\'" + this.objectOfInterest + "\']");
         targetObject.scrollIntoView();
-        console.log("%cThis is a green text", "color:green");
 
         //Der folgende Codeabschnitt wird als Monument zu studenlangem herumprobieren, um dann zur wahrscheinlich umständlichsten Lösung zu kommen, erhalten.
 
         /*super.onresume().then( () => {
          if(this.objectOfInterest){
-            console.log("!!!!!!!!!!!!!!!!!!!Object of Interest: " + this.objectOfInterest);
-            console.log("!!!!!!!!!!!!!!!!!!!Object of Interest top offset: " + this.objectOfInterest.offsetTop);
+            console.log("Object of Interest: " + this.objectOfInterest);
+            console.log("Object of Interest top offset: " + this.objectOfInterest.offsetTop);
 
             const setView = () => {
             console.log("trying to scroll");
