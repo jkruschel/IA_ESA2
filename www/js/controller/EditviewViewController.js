@@ -38,7 +38,7 @@ export default class EditviewViewController extends mwf.ViewController {
                 xhreq.onreadystatechange = () => {
                     if(xhreq.readyState === 4 && xhreq.status === 200) {
                        const responseData = JSON.parse(xhreq.responseText);
-                       const uploadedDataPath = responseData.data.imgdata;
+                       const uploadedDataPath = window.location.href + responseData.data.imgdata;
                        myitem.src = uploadedDataPath;
                        this.createOrUpdateMediaItem(myitem);
                     }
