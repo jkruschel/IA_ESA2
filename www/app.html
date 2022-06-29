@@ -44,7 +44,15 @@
     <main class="mwf-scrollview">
         <ul class="mwf-listview" data-mwf-listitem-view="myapp-listitem" data-mwf-listitem-menu="mediaItemMenu" id="ItemList">
             <li class="mwf-listitem mwf-li-title-subtitle mwf-template mwf-databind" data-mwf-templatename="myapp-listitem" data-mwf-targetview="mediaReadview">
+                <div class="listPreviewBox">
+                {{#if mediaType == 'video'}}
+                <video src="{{src}}" class="mwf-left-align listVideo"></video>
+                <button class="mwf-imgbutton mwf-img-play-button mwf-left-align" id="playButton"></button>
+                {{else}}
                 <img class="mwf-left-align" src="{{src}}"/>
+                {{/if}}
+                </div>
+                <!-- <img class="mwf-left-align" src="{{src}}"/> -->
                 <div class="mwf-li-titleblock">
                     <h2>{{title}}</h2>
                     <h3>{{addedDateString}}</h3>
@@ -98,7 +106,11 @@ data-mwf-templatename="mediaItemDialog">
             <button class="mwf-imgbutton mwf-img-pencil mwf-right-align" id="editMediaItem"></button>
         </header>
         <main class="mwf-scrollview">
-            <img src="{{item.src}}" id="previewImage"/>
+            {{#if item.mediaType == 'video'}}
+            <video src="{{item.src}}" controls="controls" class="previewVideo"></video>
+            {{else}}
+            <img class="previewImage" src="{{item.src}}"/>
+            {{/if}}
             <span>{{item.description}}</span>
         </main>
         <footer>
@@ -134,15 +146,20 @@ data-mwf-templatename="mediaItemDeleteDialog">
         </header>
         <main class="mwf-scrollview">
             <form on-submit="saveItem" id="mediaEditviewForm">
-                <fieldset>
+                <fieldset class="mwf-material">
                     <legend>URL</legend>
-                    <input placeholder="URL" type="url" name="url" id="url" value="{{item.src}}"/>
-                    <input type="file" name="uploadimg"/>
+                    <input class="mwf-material-altinput-target" type="url" name="url" id="url" value="{{item.src}}" required="required"/>
+                    <input type="file" name="uploadimg" id="uploadElement" class="mwf-material-altinput"/>
+                    <label for="uploadElement" class="mwf-material-altinput mwf-imgbutton mwf-img-camera">Upload</label>
                 </fieldset>
-                <img src="{{item.src}}"/>
-                <fieldset>
+                {{#if item.mediaType == 'video'}}
+                <video src="{{item.src}}" controls="controls"></video>
+                {{else}}
+                <img class="previewImage" src="{{item.src}}"/>
+                {{/if}}
+                <fieldset class="mwf-material">
                     <legend>Titel</legend>
-                    <input placeholder="Titel" type ="text" name="title" value="{{item.title}}"/>
+                    <input type ="text" name="title" value="{{item.title}}" required="required"/>
                 </fieldset>
                 <fieldset>
                     <legend>Beschreibung</legend>
@@ -151,8 +168,7 @@ data-mwf-templatename="mediaItemDeleteDialog">
             </form>
         </main>
         <footer>
-            <button class="mwf-left-align mwf-imgbutton mwf-img-backward mwf-back"></button>
-
+            <button class="mwf-left-align mwf-imgbutton mwf-img-backward" id="backButton"></button>
         </footer>
     </div>
 </div>

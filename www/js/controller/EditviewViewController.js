@@ -9,7 +9,6 @@ export default class EditviewViewController extends mwf.ViewController {
 
     constructor() {
         super();
-
         console.log("EditviewViewController()");
     }
 
@@ -19,6 +18,9 @@ export default class EditviewViewController extends mwf.ViewController {
     async oncreate() {
         console.log("oncreate: ", this.args);
         const myitem = this.args ? this.args.item : new MediaItem();
+        const backupTitle = myitem.title;
+        const backupImg = myitem.src;
+        const backupDesc = myitem.desciption;
 
 
         // TODO: do databinding, set listeners, initialise the view
@@ -26,6 +28,8 @@ export default class EditviewViewController extends mwf.ViewController {
 
         const editviewForm = document.getElementById("mediaEditviewForm");
         const uploadElement = editviewForm.uploadimg;
+        const urlInput = document.getElementById("url");
+
 
         this.viewProxy.bindAction("saveItem", (evt) => {
             evt.original.preventDefault();
@@ -40,6 +44,7 @@ export default class EditviewViewController extends mwf.ViewController {
                        const responseData = JSON.parse(xhreq.responseText);
                        const uploadedDataPath = window.location.href + responseData.data.imgdata;
                        myitem.src = uploadedDataPath;
+                       alert(myitem.src);
                        this.createOrUpdateMediaItem(myitem);
                     }
                 }
@@ -57,11 +62,36 @@ export default class EditviewViewController extends mwf.ViewController {
                 })
         }
 
-        const previewElement = this.root.querySelector("main form img");
+        
         uploadElement.onchange = () => {
             const imgsrc = URL.createObjectURL(uploadElement.files[0]);
+            myitem.contentType = uploadElement.files[0].type;
+            this.viewProxy.update({item: myitem});
+            let previewElement;
+            if(myitem.mediaType == "image"){
+                previewElement = this.root.querySelector("main form img");
+            }
+            else{ 
+                previewElement = this.root.querySelector("main form video");
+            }
             previewElement.src = imgsrc;
+            myitem.src = imgsrc;
+            document.getElementById("url").value = imgsrc;
         }
+
+        urlInput.onchange = () => {
+            const xhreq = new XMLHttpRequest();
+                xhreq.open("HEAD", urlInput.value, true);
+                xhreq.send();
+                xhreq.onreadystatechange = () => {
+                    if(xhreq.readyState === 4 && xhreq.status === 200) {
+                       let type = xhreq.getResponseHeader("Content-Type");
+                       myitem.contentType = type;
+                       this.viewProxy.update({item: myitem});
+                    }
+                }
+                
+            }
 
         const defaultValueButton = this.root.querySelector("#defaultItem");
         defaultValueButton.onclick = () => {
@@ -71,8 +101,20 @@ export default class EditviewViewController extends mwf.ViewController {
             myitem.src = defaultImage;
         };
 
+        const backButton = this.root.querySelector("#backButton");
+        backButton.onclick = () => {
+            myitem.title = backupTitle;
+            myitem.src = backupImg;
+            myitem.desciption = backupDesc;
+            this.previousView();
+        }
+
+
         // call the superclass once creation is done
         super.oncreate();
+        if(this.application.currentCRUDScope == "local") {
+            document.getElementById("uploadElement").style.visibility="hidden";
+        }
     }
 
     createOrUpdateMediaItem(item){
@@ -89,6 +131,12 @@ export default class EditviewViewController extends mwf.ViewController {
             })
         }
     }
+
+    // onback() {
+    //     alert(this.args.item.title + "Backup: " +  this.args.backupItem.title);
+    //     this.args.item = this.args.backupItem;
+    //     super.onback();
+    // }
 
     /*
      * for views with listviews: bind a list item to an item view

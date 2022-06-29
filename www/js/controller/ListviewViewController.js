@@ -34,7 +34,7 @@ export default class ListviewViewController extends mwf.ViewController {
             this.nextView("mediaEditview", {item: new entities.MediaItem()});
             });
         
-        this.initialiseListview(this.items);
+        //this.initialiseListview(this.items);
 
         // this.crudops.readAll().then((items) => {
         //     this.initialiseListview(items);
@@ -69,7 +69,10 @@ export default class ListviewViewController extends mwf.ViewController {
     async onresume() {
        await super.onresume();
         let targetObject = document.querySelector(".mwf-listitem[data-mwf-id=\'" + this.objectOfInterest + "\']");
-        targetObject.scrollIntoView();
+        if(targetObject) {
+            targetObject.scrollIntoView();
+            this.objectOfInterest = null;
+        }
 
         //Der folgende Codeabschnitt wird als Monument zu studenlangem herumprobieren, um dann zur wahrscheinlich umständlichsten Lösung zu kommen, erhalten.
 
