@@ -44,7 +44,6 @@ export default class EditviewViewController extends mwf.ViewController {
                        const responseData = JSON.parse(xhreq.responseText);
                        const uploadedDataPath = window.location.href + responseData.data.imgdata;
                        myitem.src = uploadedDataPath;
-                       alert(myitem.src);
                        this.createOrUpdateMediaItem(myitem);
                     }
                 }
